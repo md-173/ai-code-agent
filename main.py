@@ -13,8 +13,6 @@ def main():
     parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
    
-    if args.verbose:
-        print(f"User prompt: {args.user_prompt}")
     
     # Get API key
     load_dotenv()
@@ -24,6 +22,9 @@ def main():
     
     client = genai.Client(api_key=api_key)
     messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
+    if args.verbose:
+        print(f"User prompt: {args.user_prompt}\n")
+    
     generate_content(client, messages, args.verbose) 
 
 def generate_content(client, messages, verbose):
