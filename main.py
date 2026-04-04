@@ -10,7 +10,11 @@ def main():
     # Parse command line prompt
     parser = argparse.ArgumentParser(description="Chatbot")
     parser.add_argument("user_prompt", type=str, help="User prompt")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
+   
+    if args.verbose:
+        print(f"User prompt: {args.user_prompt}")
     
     # Get API key
     load_dotenv()
@@ -20,9 +24,9 @@ def main():
     
     client = genai.Client(api_key=api_key)
     messages = [types.Content(role="user", parts=[types.Part(text=args.user_prompt)])]
-    generate_content(client, messages) 
+    generate_content(client, messages, args.verbose) 
 
-def generate_content(client, messages):
+def generate_content(client, messages, verbose):
     response = client.models.generate_content(
             model=MODEL,
             contents=messages)
@@ -30,8 +34,9 @@ def generate_content(client, messages):
         raise RuntimeError("Gemini API response appears to be malformed")
 
     # Output token counts and response
-    print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
-    print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
+    if verbose:
+        print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
+        print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
     print(f"Response:\n{response.text}")
 
 if __name__ == "__main__":
