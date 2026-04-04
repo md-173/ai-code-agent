@@ -12,10 +12,20 @@ def main():
         raise RuntimeError("Api key not found in env file")
     client = genai.Client(api_key=api_key)
 
-    gen_content = client.models.generate_content(
-            model=MODEL, 
-            contents = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.")
-    print(gen_content.text)
+    prompt = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
+
+    content = client.models.generate_content(
+            model=MODEL,
+            contents=prompt)
+    print(f"User prompt: {prompt}")
+
+    content_metadata = content.usage_metadata
+    if content_metadata == None:
+        raise RuntimeError("Generated Content Metadata does not exist")
+
+    print(f"Prompt tokens: {content_metadata.prompt_token_count}")
+    print(f"Response tokens: {content_metadata.candidates_token_count}")
+    print(f"Response:\n{content.text}")
 
 
 if __name__ == "__main__":
