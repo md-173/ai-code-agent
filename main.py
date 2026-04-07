@@ -3,6 +3,9 @@ import argparse
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from prompts import system_prompt
+from functions.get_files_info import schema_get_files_info
+from functions.call_function import available_functions
 
 MODEL = "gemini-2.5-flash"
 
@@ -30,7 +33,10 @@ def main():
 def generate_content(client, messages, verbose):
     response = client.models.generate_content(
             model=MODEL,
-            contents=messages)
+            contents=messages,
+            config=types.GenerateContentConfig(
+                tools=[available_functions], system_instruction=system_prompt)
+    )
     if not response.usage_metadata:
         raise RuntimeError("Gemini API response appears to be malformed")
 
@@ -38,7 +44,12 @@ def generate_content(client, messages, verbose):
     if verbose:
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
-    print(f"Response:\n{response.text}")
+    function_calls = response.function_calls
+    if function_calls is not None:
+        for call in function_calls:
+            print(f"Calling function: {call.name}({call.args})")
+    else:
+        print(f"Response:\n{response.text}")
 
 if __name__ == "__main__":
     main()
