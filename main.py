@@ -5,7 +5,7 @@ from google import genai
 from google.genai import types
 from prompts import system_prompt
 from functions.get_files_info import schema_get_files_info
-from functions.call_function import available_functions
+from call_function import available_functions
 
 MODEL = "gemini-2.5-flash"
 
@@ -45,6 +45,7 @@ def generate_content(client, messages, verbose):
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
     function_calls = response.function_calls
+    
     if function_calls is not None:
         for call in function_calls:
             print(f"Calling function: {call.name}({call.args})")
