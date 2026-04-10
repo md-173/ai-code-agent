@@ -29,34 +29,38 @@ An automated, terminal-based AI coding assistant powered by the Gemini API. This
    ```bash
    git clone [https://github.com/md-173/ai-code-agent.git](https://github.com/md-173/ai-code-agent.git)
    cd ai-code-agent
-Install dependencies using uv:
+   ```
 
-Bash
-uv sync
-Set up environment variables:
-Create a .env file in the root directory and add your API key:
+2. **Install dependencies using uv:**
+   ```bash
+   uv sync
+   ```
 
-Code snippet
-GEMINI_API_KEY=your_api_key_here
-Usage
+3. **Set up environment variables:**
+   Create a `.env` file in the root directory and add your API key:
+   ```env
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+## Usage
+
 Run the main agent script to start the interactive session:
-
-Bash
+```bash
 uv run main.py
-Testing
+```
+
+## Testing
+
 This project utilizes a suite of unit tests to ensure the reliability of file operations and code execution tools. To run the tests, execute:
-
-Bash
+```bash
 uv run pytest
-Current test coverage includes test_get_file_content.py, test_get_files_info.py, test_run_python_file.py, and test_write_file.py.
+```
+*Current test coverage includes `test_get_file_content.py`, `test_get_files_info.py`, `test_run_python_file.py`, and `test_write_file.py`.*
 
-Project Structure
-main.py: The entry point for the agent loop.
+## Project Structure
 
-config.py: Configuration and environment variable management.
-
-prompts.py: System prompts and context-handling logic.
-
-call_function.py: Tool orchestration logic linking the LLM to local functions.
-
-functions/: Core tool implementations for file and execution tasks.
+* `main.py`: The entry point for the agent loop.
+* `config.py`: Configuration and environment variable management.
+* `prompts.py`: System prompts and context-handling logic.
+* `call_function.py`: Tool orchestration logic linking the LLM to local functions.
+* `functions/`: Core tool implementations for file and execution tasks.
